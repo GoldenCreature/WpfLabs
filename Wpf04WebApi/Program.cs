@@ -62,6 +62,8 @@
 */
 
 // Web Application을 생성하기 위한 빌더(Builder) 생성
+using Wpf04WebApi.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Web Server가 사용할 주소를 직접 지정
@@ -71,6 +73,19 @@ builder.WebHost.UseUrls("http://localhost:5000");
 
 // Controller를 사용할 수 있도록 필요한 기능을 등록
 builder.Services.AddControllers();
+
+/*
+ * DI (Dependency Injection)
+ *  - 필요한 객체를 직접 생성하지 않고
+ *    외부에서 전달받아 사용하는 방식
+ *    
+ * IBookService가 필요하면 BookService 객체를 제공하도록 등록한다.
+ * 
+ * Singleton
+ *  - Server가 실행되는 동안 하나의 BookService 객체를 계속 사용해라.
+ *  - BookService가 List<Book> 데이터를 가지고 있으니 Singleton을 사용한다.
+ */
+builder.Services.AddSingleton<IBookService, BookService>();
 
 // 위에서 설정한 내용을 기반으로 실제 WebApplication 객체 생성
 var app = builder.Build();

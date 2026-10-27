@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Wpf04WebApi.Services;
 
 namespace Wpf04WebApi.Controllers
 {
@@ -44,6 +45,17 @@ namespace Wpf04WebApi.Controllers
     [Route("api/books")]
     public class BooksController : ControllerBase
     {
-        
+        private readonly IBookService _bookService;
+
+        /*
+         * Controller Injection
+         *  - 생성자를 통해 필요한 객체를 외부에서 전달받는 DI 방식
+         *  - Program.cs에 등록된 BookService가 IBookService 형태로 전달
+         */
+
+        public BooksController(IBookService bookService)
+        {
+            _bookService = bookService;
+        }
     }
 }
