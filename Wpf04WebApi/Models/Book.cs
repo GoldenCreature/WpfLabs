@@ -46,6 +46,11 @@
         public string Status
         {
             get
+            {
+                return IsBorrowed
+                    ? "대여 중"
+                    : "대여 가능";
+            }
         }
     }
 }
