@@ -35,7 +35,7 @@
         public int Id { get; set; }
 
         // 도서 제목
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         // 저자
         public string Author { get; set; } = string.Empty;

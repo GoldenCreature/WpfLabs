@@ -1,6 +1,8 @@
-@Wpf04WebApi_HostAddress = http://localhost:5261
 
-GET {{Wpf04WebApi_HostAddress}}/weatherforecast/
+# 전체 도서 조회
+# GET /api/books
+# 
+# Accept : 데이터 형식 지정
+
+GET http://localhost:5000/api/books
 Accept: application/json
-
-###

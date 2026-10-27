@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Wpf04WebApi.Models;
 using Wpf04WebApi.Services;
 
 namespace Wpf04WebApi.Controllers
@@ -56,6 +58,20 @@ namespace Wpf04WebApi.Controllers
         public BooksController(IBookService bookService)
         {
             _bookService = bookService;
+        }
+
+        /*
+         *  전체 도서 조회
+         *  Get /api/books
+         *  
+         *  성공: 200 OK
+         */
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            List<Book> books = _bookService.GetAll();
+
+            return Ok(books);
         }
     }
 }
