@@ -1,0 +1,39 @@
+﻿<!--
+    MainWindow.xaml
+     - 프로그램의 메인 화면을 구성
+     
+-->
+<Window x:Class="Wpf01Basic.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Wpf01Basic"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <!--
+        Window
+         - WPF에서 하나의 창을 나타내는 객체
+         - Title, Height, Width, ...
+    
+        Property(속성)
+         - 객체가 가지고 있는 값이나 상태
+         - Window.Title, Button.Content, TextBox.Text, ...
+    -->
+    <Grid>
+        <!--
+            Layout
+             - 화면에서 Control의 크기와 위치를 배치하는 방식
+            
+            Layout Panenl
+             - 자식 Control의 배치를 담당하는 객체
+            
+            대표적인 Layout
+             - Grid       : 행과 열을 이용해 배치
+             - StackPanel : 한 방향으로 순서대로 배치
+             - WrapPanel  : 공간이 부족하며 다음 줄로 배치
+             - DockPanel  : 상/하/좌/우에 붙여 배치
+             - Canvas     : 좌표를 이용해 자유롭게 배치
+        -->
+    </Grid>
+</Window>

@@ -1,0 +1,13 @@
+
+launchSettings.json
+ : ASP.NET Core 프로젝트를 실행할 떄 사용하는 실행 설정 파일
+
+applicationUrl
+ : Server가 HTTP Request를 기다릴 주소를 지정
+
+launchBrowser
+ : false일 때, Server 실행 시 자동으로 Web Browser를 실행하지 않는다.
+ 
+environmentVariables: { -> 환경 변수 설정
+	ASPNETCORE_ENVIRONMENT -> ASP.NET Core의 현재 실행 환경을 지정 (Development, 개발 환경)
+}

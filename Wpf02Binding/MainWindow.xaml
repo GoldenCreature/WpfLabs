@@ -1,0 +1,161 @@
+﻿<Window x:Class="Wpf02Binding.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:converters="clr-namespace:Wpf02Binding.Converters"
+        xmlns:validations="clr-namespace:Wpf02Binding.Validations"
+        Title="업무 진행 관리" Height="540" Width="800">
+
+    <Window.Resources>
+        <converters:ProgressStatusConverter x:Key="ProgressStatusConverter"/>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            Text="{Binding Title, RelativeSource={RelativeSource AncestorType=Window}, Mode=OneTime}"
+            FontSize="22"
+            FontWeight="Bold"
+            Margin="0,0,0,20"
+            />
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <!---업무 목록-->
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="업무 목록"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Margin="0, 0, 0, 10"/>
+                <ListBox ItemsSource="{Binding Tasks, Mode=OneWay}"
+                         SelectedItem="{Binding SelectedTask, Mode=TwoWay}"
+                         Height="390">
+
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="10">
+                                <StackPanel>
+                                    <!--TaskItem.Title-->
+                                    <TextBlock Text="{Binding Title, Mode=OneWay}"
+                                               FontSize="15"
+                                               FontWeight="SemiBold"/>
+                                    <!--TaskItem.Progress-->
+                                    <ProgressBar Minimum="0"
+                                                 Maximum="100"
+                                                 Value="{Binding Progress, Mode=OneWay}"
+                                                 Height="15"
+                                                 Margin="0, 5, 0, 5"/>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Progress, Mode=OneWay}"/>
+                                        <TextBlock Text="% - "/>
+                                        <TextBlock Text="{Binding Progress, Mode=OneWay,
+                                            Converter={StaticResource ProgressStatusConverter }}"/>
+                                    </StackPanel>
+                                    
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    
+                </ListBox>
+            </StackPanel>
+            <!--선택한 업무-->
+            <StackPanel Grid.Column="2">
+                <TextBlock Text="선택한 업무"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Margin="0, 0, 0, 20"/>
+                <TextBlock Text="업무명"/>
+                <TextBox x:Name="TitleTextBox"
+                           Text="{Binding SelectedTask.Title, 
+                                          UpdateSourceTrigger=PropertyChanged}"
+                           Height="30"
+                           Margin="0, 5, 0, 15"
+                           VerticalContentAlignment="Center"/>
+                <TextBlock Text="실시간 입력 확인"/>
+                <TextBlock Text="{Binding Text,
+                                        ElementName=TitleTextBox,
+                                        Mode=OneWay}"
+                           FontWeight="SemiBold"
+                           Margin="0, 5, 0, 20"/>
+                <TextBlock Text="진행률 (0 ~ 100)"/>
+                <TextBox x:Name="ProgressTextBox"
+                           Height="30"
+                           Margin="0, 5, 0, 5"
+                           VerticalAlignment="Center">
+                    <TextBox.Text>
+                        <Binding Path="SelectedTask.Progress"
+                                 Mode="TwoWay"
+                                 UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <validations:ProgressValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <Border BorderBrush="Red"
+                                    BorderThickness="1">
+                                <AdornedElementPlaceholder/>
+                            </Border>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
+                </TextBox>
+                <TextBlock Text="{Binding
+                                  Path=(Validation.Errors)[0].ErrorContent,
+                                  ElementName=ProgressTextBox,
+                                  Mode=OneWay}"
+                           Foreground="Red"
+                           FontSize="12"
+                           Margin="0, 0, 0, 5"/>
+                <TextBlock Margin="0, 0, 0, 15"
+                           Foreground="Gray">
+                    <Run Text="입력 오류 여부: "/>
+                    <Run Text="{Binding
+                                Path=(Validation.HasError),
+                                ElementName=ProgressTextBox,
+                                Mode=OneWay}"/>
+                </TextBlock>
+                <TextBlock Text="진행 상태"/>
+                <TextBlock Text="{Binding SelectedTask.Progress,
+                                  Mode=OneWay,
+                                  Converter={StaticResource ProgressStatusConverter}}"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Margin="0, 5, 0, 10"/>
+                <ProgressBar Minimum="0"
+                             Maximum="100"
+                             Value="{Binding SelectedTask.Progress,
+                                     Mode=OneWay}"
+                             Height="25"
+                             Margin="0, 0, 0, 10"/>
+                <StackPanel Orientation="Horizontal"
+                            Margin="0, 0, 0, 20">
+                    <TextBlock Text="진행률: "/>
+                    <TextBlock Text="{Binding SelectedTask.Progress,
+                                      Mode=OneWay}"
+                               FontWeight="Bold"/>
+                    <TextBlock Text="%"/>
+                </StackPanel>
+                
+                <!--Click Event -->
+                <Button Content="선택한 업무 삭제"
+                        Height="30"
+                        Click="DeleteTaskButton_Click"/>
+                
+            </StackPanel>
+           
+        </Grid>
+    </Grid>
+    
+</Window>
