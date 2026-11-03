@@ -1,8 +1,61 @@
-
+# Wpf04WebApi.http
+# - Visual Studio에서 HTTP Request를 
+#   직접 보내 Web API를 테스트하는 용도
+#
+# .http File = Client
+# ASP.NET Core = Server
+#
 # 전체 도서 조회
-# GET /api/books
-# 
-# Accept : 데이터 형식 지정
-
+# Accept : Response의 데이터 형식 지정
 GET http://localhost:5000/api/books
+Accept: application/json
+
+###
+# 특정 도서 조회
+GET http://localhost:5000/api/books/2
+Accept: application/json
+
+###
+# 도서 검색
+GET http://localhost:5000/api/books/search?keyword=Code
+Accept: application/json
+
+###
+# 새로운 도서 추가
+# Content-Type : Request Body의 데이터 형식 지정
+POST http://localhost:5000/api/books
+Content-Type: application/json
+{
+    "title" : "Network Basic",
+    "author" : "유관순",
+    "isBorrowed" : false
+}
+
+###
+# 기존 도서 수정
+PUT http://localhost:5000/api/books/1
+Content-Type: application/json
+{
+    "title" : "Clean Code",
+    "author" : "Robert C. Martin",
+    "isBorrowed" : true
+}
+
+###
+# 도서 삭제
+DELETE http://localhost:5000/api/books/2
+
+###
+# BadRequest 테스트
+POST http://localhost:5000/api/books
+Content-Type: application/json
+{
+    "title" : "",
+    "author" : "을지문덕",
+    "isBorrowed": false
+}
+
+###
+# NotFound 테스트
+GET http://localhost:5000/api/books/999
 Accept: application/json

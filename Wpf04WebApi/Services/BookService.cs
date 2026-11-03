@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using System.Numerics;
 using Wpf04WebApi.Models;
 
 namespace Wpf04WebApi.Services
@@ -84,7 +86,7 @@ namespace Wpf04WebApi.Services
             {
                 Id = _nextId++,
                 Title = request.Title,
-                Author = request.Autor,
+                Author = request.Author,
                 IsBorrowed = request.IsBorrowed
             };
             _books.Add(newBook);
@@ -104,7 +106,7 @@ namespace Wpf04WebApi.Services
             }
 
             book.Title = request.Title;
-            book.Author = request.Autor;
+            book.Author = request.Author;
             book.IsBorrowed = request.IsBorrowed;
 
             return book;
@@ -127,6 +129,5 @@ namespace Wpf04WebApi.Services
 
             return true;
         }
-
     }
 }

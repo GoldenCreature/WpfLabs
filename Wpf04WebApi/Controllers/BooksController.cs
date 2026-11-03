@@ -73,5 +73,139 @@ namespace Wpf04WebApi.Controllers
 
             return Ok(books);
         }
+
+        /*
+         *  특정 도서 조회
+         *  GET /api/books/1
+         * 
+         *  Route Parameter(= Path Parameter)
+         *   URL의 일부를 값으로 전달한다.
+         *  
+         *  /api/books/1
+         *   -> id = 1
+         */
+        [HttpGet("{id:int}")]
+        public IActionResult GetById(int id)
+        {
+            Book? book = _bookService.GetByID(id);
+
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(book);
+        }
+
+        /*
+         *  도서 검색
+         *  GET /api/books/search?keyword=Code
+         *  
+         *  Query String (= Query Parameter)
+         *   URL 뒤의 ?를 이용해서 그 이후의 문자열 전체를 의미하며,
+         *   Key-Value 형태로 파라미터를 전달한다.
+         *   2개 이상인 경우 &를 이용하여 구분한다.
+         *   
+         *   /api/books/search?keyword=Code
+         *    -> keyword = code 와 같이 전달
+         *    
+         *   /api/books/search?keyword=Code&author=홍길동
+         *    -> keyword = Code, author = 홍길동
+         */
+        [HttpGet("search")]
+        public IActionResult Search(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                return BadRequest("검색어를 입력해주세요.");
+            }
+
+            List<Book> result = _bookService.Search(keyword);
+
+            return Ok(result);
+        }
+
+        /*
+         *  새로운 도서 추가
+         *  POST /api/books
+         *  
+         *  Request Body의 JSON 형태로 전달이 되고,
+         *  BookRequest 객체로 변환된다.
+         *  
+         *  성공 
+         *  201 Created
+         */
+        [HttpPost]
+        public IActionResult Create(BookRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Title))
+            {
+                return BadRequest("도서 제목을 입력해주세요.");
+            }
+
+            if (string.IsNullOrWhiteSpace(request.Author))
+            {
+                return BadRequest("저자를 입력해주세요.");
+            }
+
+            Book newBook = _bookService.Create(request);
+
+            /*
+             *  CreatedAtAction
+             *  201 Created와 함께 생성한 Resource 정보를 반환
+             */
+            return CreatedAtAction(nameof(GetById)
+                                  , new {id = newBook.Id}
+                                  , newBook); 
+
+        }
+
+        /*
+         *  기존 도서 수정
+         *  PUT /api/books/1
+         *  
+         *  성공
+         *  200 OK
+         */
+        [HttpPut("{id:int}")]
+        public IActionResult Update(int id, BookRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Title))
+            {
+                return BadRequest("도서 제목을 입력해주세요.");
+            }
+
+            if (string.IsNullOrWhiteSpace(request.Author))
+            {
+                return BadRequest("저자를 입력해주세요.");
+            }
+
+            Book? book = _bookService.Update(id, request);
+            if (book == null)
+            {
+                return NotFound();
+            }
+            return Ok(book);
+        }
+
+        /*
+         *  도서 삭제
+         *  DELETE /api/books/1
+         *  
+         *  성공
+         *  204 No Content
+         */
+        [HttpDelete("{id:int}")]
+        public IActionResult Delete(int id)
+        {
+            bool result = _bookService.Delete(id);
+
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
     }
 }
